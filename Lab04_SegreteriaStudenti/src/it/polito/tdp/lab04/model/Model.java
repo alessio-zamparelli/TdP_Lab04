@@ -23,4 +23,15 @@ public class Model {
 		return studenteDAO.getStudente(matricola);
 	}
 
+	public List<Studente> getIscrittiCorso(Corso inCorso) {
+		// TODO Auto-generated method stub
+		return corsoDAO.getIscrittiCorso(inCorso);
+	}
+
+	public List<Corso> getCorsiMatricola(int matricola) {
+
+		return corsoDAO.getCorsiMatricola(matricola);
+		
+	}
+
 }

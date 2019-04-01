@@ -5,19 +5,18 @@ public class Studente {
 	private int matricola;
 	private String nome;
 	private String cognome;
-	private String CDS;
+	private String cds;
 	
-	public Studente(int matricola, String nome, String cognome, String cDS) {
-		super();
+	public Studente(int matricola, String nome, String cognome, String cds) {
 		this.matricola = matricola;
 		this.nome = nome;
 		this.cognome = cognome;
-		CDS = cDS;
+		this.cds = cds;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Studente [matricola=%s, nome=%s, cognome=%s, CDS=%s]", matricola, nome, cognome, CDS);
+		return String.format("matricola=%s\tnome=%s\tcognome=%s\tCDS=%s\n", matricola, nome, cognome, cds);
 	}
 
 	public int getMatricola() {
@@ -33,7 +32,7 @@ public class Studente {
 	}
 
 	public String getCDS() {
-		return CDS;
+		return cds;
 	}
 
 	

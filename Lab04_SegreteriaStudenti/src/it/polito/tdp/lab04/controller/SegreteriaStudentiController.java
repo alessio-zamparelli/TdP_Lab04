@@ -59,11 +59,41 @@ public class SegreteriaStudentiController {
 
 	@FXML
 	void doCercaCorsi(ActionEvent event) {
+		int matricola = 0;
+		try {
+			matricola = Integer.parseInt(txtMatricola.getText());
+		} catch (NumberFormatException e) {
+			// TODO: handle exception
+		}
+
+		if (matricola == 0) {
+			// TODO: errore del tipo
+		}
+
+		List<Corso> corsiMatricola = model.getCorsiMatricola(matricola);
+
+		txtResult.clear();
+		for (Corso corso : corsiMatricola)
+			txtResult.appendText(String.format("%-7s   %d   %-50s %d\n", corso.getCodins(), corso.getCrediti(),
+					corso.getNome(), corso.getPd()));
 
 	}
 
 	@FXML
 	void doCercaIscrittiCorso(ActionEvent event) {
+
+		Corso inCorso = comboCorso.getSelectionModel().getSelectedItem();
+		if (inCorso.getNome().equals("")) {
+			txtResult.setText("Selezionare almeno un corso");
+			return;
+		}
+
+		List<Studente> studenti = model.getIscrittiCorso(inCorso);
+
+		txtResult.clear();
+		for (Studente studente : studenti)
+			txtResult.appendText(String.format("%d %-25s %-25s %-20s\n", studente.getMatricola(), studente.getNome(),
+					studente.getCognome(), studente.getCDS()));
 
 	}
 
@@ -73,24 +103,23 @@ public class SegreteriaStudentiController {
 	@FXML
 	void doCercaNome(ActionEvent event) {
 		// TODO: da completare il controllo magari scrivendo qualcosa a schermo
-		int matricola=0;
-		
+		int matricola = 0;
+
 		try {
 			matricola = Integer.parseInt(txtMatricola.getText());
-			if (matricola==0) {
+			if (matricola == 0) {
 				// TODO: da completare l'errore anche qui, la matricola non puo essere zero
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 		Studente s = model.getStudente(matricola);
-		if (s==null) {
-			//TODO: studente non trovato
+		if (s == null) {
+			// TODO: studente non trovato
 			return;
 		}
 		txtNome.setText(s.getNome());
 		txtCognome.setText(s.getCognome());
-		
 
 	}
 

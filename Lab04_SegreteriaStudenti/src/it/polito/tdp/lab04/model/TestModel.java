@@ -9,7 +9,12 @@ public class TestModel {
 		/*
 		 * 	Write here your test model
 		 */
+		
+		Corso c = model.getTuttiICorsi().stream().findFirst().orElse(null);
 
+//		model.getIscrittiCorso(c);
+		System.out.println("ciao");
+		System.out.println(model.getIscrittiCorso(c));
 	}
 
 }
