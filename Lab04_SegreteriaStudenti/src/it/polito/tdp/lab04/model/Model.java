@@ -34,4 +34,8 @@ public class Model {
 		
 	}
 
+	public boolean isMatricolaImmatricolata(int matricola) {
+		return studenteDAO.getStudente(matricola)!=null;
+	}
+
 }

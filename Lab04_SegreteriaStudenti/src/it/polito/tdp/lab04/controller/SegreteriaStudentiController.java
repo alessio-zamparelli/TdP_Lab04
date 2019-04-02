@@ -59,23 +59,54 @@ public class SegreteriaStudentiController {
 
 	@FXML
 	void doCercaCorsi(ActionEvent event) {
+
+		Corso corsoSelezionato = comboCorso.getSelectionModel().getSelectedItem();
+
 		int matricola = 0;
 		try {
 			matricola = Integer.parseInt(txtMatricola.getText());
 		} catch (NumberFormatException e) {
 			// TODO: handle exception
+			e.printStackTrace();
+			return;
 		}
 
+		if(!model.isMatricolaImmatricolata(matricola)) {
+			txtResult.clear();
+			txtResult.setText("La matricola non risulta immatricolata");
+			return;
+		}
+		
 		if (matricola == 0) {
-			// TODO: errore del tipo
+			txtResult.clear();
+			txtResult.setText("Matricola non valida");
+			return;
 		}
 
 		List<Corso> corsiMatricola = model.getCorsiMatricola(matricola);
 
-		txtResult.clear();
-		for (Corso corso : corsiMatricola)
-			txtResult.appendText(String.format("%-7s   %d   %-50s %d\n", corso.getCodins(), corso.getCrediti(),
-					corso.getNome(), corso.getPd()));
+		if (corsoSelezionato == null || corsoSelezionato.getNome().equals("")) {
+
+			if (corsiMatricola.size() == 0) {
+				txtResult.clear();
+				txtResult.setText("Non sono presenti insegnamenti per la matricola inserita");
+				return;
+			}
+
+			txtResult.clear();
+			for (Corso corso : corsiMatricola)
+				txtResult.appendText(String.format("%-7s   %d   %-50s %d\n", corso.getCodins(), corso.getCrediti(),
+						corso.getNome(), corso.getPd()));
+
+		} else {
+			txtResult.clear();
+			if (corsiMatricola.contains(corsoSelezionato)) {
+				txtResult.setText("Studente gia iscritto a qusto corso\n");
+			} else {
+				txtResult.setText("Studente non iscritto a questo corso\n");
+			}
+			
+		}
 
 	}
 
@@ -135,7 +166,8 @@ public class SegreteriaStudentiController {
 		txtCognome.clear();
 		txtMatricola.clear();
 		txtResult.clear();
-
+		this.setComboItems();
+		
 	}
 
 	@FXML
@@ -163,6 +195,7 @@ public class SegreteriaStudentiController {
 
 	private void setComboItems() {
 
+		this.comboCorso.getItems().clear();
 		corsi = model.getTuttiICorsi();
 		corsi.add(new Corso("", 0, "", 0));
 		Collections.sort(corsi);
