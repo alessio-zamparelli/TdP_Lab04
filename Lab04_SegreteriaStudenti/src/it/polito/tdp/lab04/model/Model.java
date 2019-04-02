@@ -24,7 +24,6 @@ public class Model {
 	}
 
 	public List<Studente> getIscrittiCorso(Corso inCorso) {
-		// TODO Auto-generated method stub
 		return corsoDAO.getIscrittiCorso(inCorso);
 	}
 
@@ -36,6 +35,10 @@ public class Model {
 
 	public boolean isMatricolaImmatricolata(int matricola) {
 		return studenteDAO.getStudente(matricola)!=null;
+	}
+	
+	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
+		return corsoDAO.inscriviStudenteACorso(studente, corso);
 	}
 
 }

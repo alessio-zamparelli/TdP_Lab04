@@ -68,9 +68,26 @@ public class CorsoDAO {
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
 	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
-		// TODO
-		// ritorna true se l'iscrizione e' avvenuta con successo
-		return false;
+
+		final String sql = "INSERT INTO iscrizione (matricola, codins) VALUES (?,?)";
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, studente.getMatricola());
+			st.setString(2, corso.getCodins());
+
+			long res = st.executeLargeUpdate();
+			
+			if(res == 1)
+				return true;
+			return false;
+//			java.sql.SQLIntegrityConstraintViolationException
+		} catch (SQLException  e) {
+			e.printStackTrace();
+			return false;
+//			throw new RuntimeException("Errore Db");
+		}
 	}
 
 	/*
@@ -109,12 +126,9 @@ public class CorsoDAO {
 	}
 
 	public List<Corso> getCorsiMatricola(int matricola) {
-	final String sql = "SELECT c.codins, c.crediti, c.nome, c.pd " + 
-				"FROM corso AS c, iscrizione AS i, studente AS s " + 
-				"WHERE c.codins=i.codins " + 
-				"AND i.matricola=s.matricola " + 
-				"AND s.matricola = ? " + 
-				"ORDER BY c.nome";
+		final String sql = "SELECT c.codins, c.crediti, c.nome, c.pd "
+				+ "FROM corso AS c, iscrizione AS i, studente AS s " + "WHERE c.codins=i.codins "
+				+ "AND i.matricola=s.matricola " + "AND s.matricola = ? " + "ORDER BY c.nome";
 
 		List<Corso> corsi = new ArrayList<Corso>();
 
@@ -127,7 +141,6 @@ public class CorsoDAO {
 
 			while (rs.next()) {
 
-				
 				String codins = rs.getString("codins");
 				int crediti = rs.getInt("crediti");
 				String nome = rs.getString("nome");

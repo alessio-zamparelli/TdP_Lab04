@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import it.polito.tdp.lab04.DAO.StudenteDAO;
 import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Model;
 import it.polito.tdp.lab04.model.Studente;
@@ -139,14 +138,14 @@ public class SegreteriaStudentiController {
 		try {
 			matricola = Integer.parseInt(txtMatricola.getText());
 			if (matricola == 0) {
-				// TODO: da completare l'errore anche qui, la matricola non puo essere zero
+				txtResult.setText("Errore nella matricola, controllare i paramentri");
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 		Studente s = model.getStudente(matricola);
 		if (s == null) {
-			// TODO: studente non trovato
+			txtResult.setText("Attenzione, studente non trovato");
 			return;
 		}
 		txtNome.setText(s.getNome());
@@ -156,6 +155,29 @@ public class SegreteriaStudentiController {
 
 	@FXML
 	void doIscrivi(ActionEvent event) {
+		
+		Corso c = comboCorso.getSelectionModel().getSelectedItem();
+		Studente s=null;
+		try {
+		s = model.getStudente(Integer.parseInt(txtMatricola.getText()));
+		} catch( NumberFormatException e) {
+			e.printStackTrace();
+		}
+		
+		if(s == null) {
+			txtResult.setText("Studente non trovato");
+			return;
+		}
+		
+		txtNome.setText(s.getNome());
+		txtCognome.setText(s.getCognome());
+		
+		boolean ret = model.inscriviStudenteACorso(s, c);
+		
+		if (ret) 
+			txtResult.setText(String.format("Aggiunto lo studente con matricola %d al corso %s", s.getMatricola(), c.getCodins()));
+		else 
+			txtResult.setText(String.format("Impossibile aggiungere lo studente con matricola %d al corso %s.\nVerificare se lo studente risulta gia aggiunto.", s.getMatricola(), c.getCodins()));
 
 	}
 
